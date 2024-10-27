@@ -1,0 +1,344 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .at-cursor-bar { */
+/* 	background: rgba(52, 52, 54, 0.25); */
+/* } */
+
+.at-cursor-beat {
+	background-color:#facc14 !important;
+}
+
+.at-highlight * {
+	@apply fill-[#70d6ff] stroke-[#70d6ff] !important;
+}
+
+.at-surface-svg {
+	font-family: "Geist Sans" !important;
+}
+.at-surface-svg text {
+	font-family: "Geist Sans" !important;
+}
+.at-surface g text {
+	font-family: "Geist Sans" !important;
+}
+.at-song-title {
+	font-family: "Geist Sans" !important;
+}
+.at {
+	font-family: "Geist Sans" !important;
+	fill: light-dark(black, #cacaca) !important;
+}
+
+.at-surface * {
+	fill: light-dark(black, #cacaca) !important;
+}
+
+rect {
+	fill: light-dark(black, #bcff69) !important;
+}
+
+.at-surface-svg path {
+	stroke: light-dark(black, #cacaca) !important;
+}
+
+::-webkit-slider-thumb {
+	background-color: #70d6ff !important;
+}
+
+.at-selection * {
+	background-color: #70d6ff;
+	opacity: 0.2;
+}
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 20 14.3% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+    --destructive: 0 72.22% 50.59%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 14.3% 4.1%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 60 9.1% 97.8%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 60 9.1% 97.8%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 60 9.1% 97.8%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 60 9.1% 97.8%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 60 9.1% 97.8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 35.5 91.7% 32.9%;
+  }
+}
+ @font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-200-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-200-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-300-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 300;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-300-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-300-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-400-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-400-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-400-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-500-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 500;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-500-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-500-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-600-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 600;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-600-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-600-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-700-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 700;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-700-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-700-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-800-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 800;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-800-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-800-normal.woff)
+			format("woff");
+}
+
+/* geist-mono-latin-900-normal */
+@font-face {
+	font-family: "Geistura";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 900;
+	unicode-range: U+00-7F;
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-900-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-mono@latest/latin-900-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-100-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 100;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-100-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-100-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-200-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 200;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-200-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-200-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-300-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 300;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-300-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-300-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-400-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 400;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-400-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-400-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-500-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 500;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-500-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-500-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-600-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 600;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-600-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-600-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-700-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 700;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-700-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-700-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-800-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 800;
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-800-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-800-normal.woff)
+			format("woff");
+}
+
+/* geist-sans-latin-900-normal */
+@font-face {
+	font-family: "Geist Sans";
+	font-style: normal;
+	font-display: swap;
+	font-weight: 900;
+
+	unicode-range: U+00-7F;
+
+	src: url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-900-normal.woff2)
+			format("woff2"),
+		url(https://cdn.jsdelivr.net/fontsource/fonts/geist-sans@latest/latin-900-normal.woff)
+			format("woff");
+}
+
+@font-face {
+	font-family: "Geistura";
+	src: url("/font/Bravura.woff2") format("woff2");
+	unicode-range: U+1D100-1D1FF, U+2600-26FF, U+25A0-25FF, U+E00-F8FF,
+		U+10000-1FFFD;
+}
+
+@font-face {
+	font-family: "Geist Sans";
+	src: url("/font/Bravura.woff2") format("woff2");
+	unicode-range: U+1D100-1D1FF, U+2600-26FF, U+25A0-25FF, U+E00-F8FF,
+		U+10000-1FFFD;
+}
+html {
+	font-family: "Geist Sans" !important;
+}
