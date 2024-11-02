@@ -1,8 +1,11 @@
+
+cargo-features = ["profile-rustflags", "trim-paths"]
+
 [package]
 name = "opentab"
 version = "0.1.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["Oscar Nordmar"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -24,4 +27,21 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-fs = "2"
 tauri-plugin-dialog = "2"
+tauri-plugin-store = "2.0.0"
+tauri-plugin-http = "2"
 
+[unstable]
+profile-rustflags = true
+
+[profile.dev]
+incremental = true          # Compile your binary in smaller steps.
+rustflags = ["-Zthreads=8"] # Better compile performance.
+
+[profile.release]
+codegen-units = 1                            # Allows LLVM to perform better optimization.
+lto = true                                   # Enables link-time-optimizations.
+opt-level = "s"                              # Prioritizes small binary size. Use `3` if you prefer speed.
+panic = "abort"                              # Higher performance by disabling panic handlers.
+strip = true                                 # Ensures debug symbols are removed.
+trim-paths = "all"                           # Removes potentially privileged information from your binaries.
+rustflags = ["-Cdebuginfo=0", "-Zthreads=8"] # Better compile performance.

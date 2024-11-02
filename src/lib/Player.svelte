@@ -1,31 +1,25 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import * as Select from "$lib/ui/select";
-
-  import * as Card from "$lib/ui/card";
+  import * as DropdownMenu from "$lib/ui/dropdown-menu";
   import * as alpha from "@coderline/alphatab";
   import { onMount, onDestroy } from "svelte";
-  import { NotationElement, displayTime, loadTab } from "$lib/player";
+  import { NotationElement } from "$lib/player";
   import { readFile } from "@tauri-apps/plugin-fs";
   import { AlphaTabApi, importer } from "@coderline/alphatab";
-
-  import * as DropdownMenu from "$lib/ui/dropdown-menu";
-
   import { open } from "@tauri-apps/plugin-dialog";
   import Icon from "@iconify/svelte";
   import Header from "./Header.svelte";
   import { log } from "./logger.svelte";
   import Button from "./ui/button/button.svelte";
   import { Play, Pause, Repeat, Upload, Binary, Rewind } from "lucide-svelte";
-  import Separator from "./ui/separator/separator.svelte";
-  import ModeToggle from "./ModeToggle.svelte";
-  import { Description } from "./ui/card";
-  import TrackControls from "./TrackControls.svelte";
-  import { mode } from "mode-watcher";
   import Zoom from "./Zoom.svelte";
-  import CommandPallete from "./CommandPallete.svelte";
-  import PlayerControls from "./PlayerControls.svelte";
+  import { Store } from "@tauri-apps/plugin-store";
+  import { defaultConfig } from "./player";
+  import Drawer from "./Drawer.svelte";
+
+  let store = $state<Store>();
+
   let element = $state<HTMLElement>();
 
   let files = $state<FileList>();
@@ -39,8 +33,6 @@
   let activeTrack = $state<number>(0);
   /** The playback speed. */
   let playBackSpeed = $state<number>(1);
-  /** The playback speed as a percentage. */
-  let speedPercent = $derived<number>(Math.round(playBackSpeed * 100));
   /** The master volume. */
   let masterVolume = $state<number>(1);
   /** The metronome volume. */
@@ -74,18 +66,26 @@
 
   let isScoreLoaded = $derived(score !== undefined && score !== null);
 
-  let drawerOpen = $state(false);
   let isPlaying = $state<boolean>(false);
 
   let isLooping = $state(false);
 
-  let paletteOpen = $state(false);
+  let tempo = $derived(score?.tempo ?? 0)
 
   // Track settings
+  function setTrackVolume(volume: number, track: number) {
+
+      if (tracks[track]) {
+        api?.changeTrackVolume([tracks[track]], volume);
+      }
+  }
 
   $effect(() => {
     if (api?.settings.display.scale) {
       api.updateSettings();
+      store?.set("config", api.settings).then(() => {
+        log.info("Updated config");
+      });
     }
   });
   $effect(() => {
@@ -142,26 +142,7 @@
 
   onMount(async () => {
     element = document.querySelector("#alphaTab")! as HTMLElement;
-
-    api = new AlphaTabApi(element, {
-      core: {
-        engine: "svg",
-        fontDirectory: "font/",
-      },
-      display: {
-        stretchForce: 0.5,
-        staveProfile: 3,
-        scale: 1.2,
-      },
-
-      player: {
-        scrollOffsetY: -100,
-        enablePlayer: true,
-        enableCursor: true,
-        enableUserInteraction: true,
-        soundFont: `https://cdn.jsdelivr.net/npm/@coderline/alphatab@alpha/dist/soundfont/sonivox.sf2`,
-      },
-    } as alpha.Settings);
+    api = new AlphaTabApi(element, defaultConfig as alpha.Settings);
     api.settings.notation.elements.set(NotationElement.ScoreTitle, false);
     api.settings.notation.elements.set(NotationElement.ScoreSubTitle, false);
     api.settings.notation.elements.set(NotationElement.ScoreArtist, false);
@@ -205,11 +186,6 @@
       trackSolos.push(false);
     }
   }
-  function setTrackVolume(volume: number, track: number) {
-    if (tracks[track]) {
-      api?.changeTrackVolume([tracks[track]], volume);
-    }
-  }
 
   function toggleLooping() {
     isLooping = !isLooping;
@@ -248,9 +224,6 @@
     if (!api) {
       return;
     }
-    if (paletteOpen) {
-      return;
-    }
     if (event.code === "Space") {
       event.preventDefault();
       playPause();
@@ -280,18 +253,28 @@
 
       toggleLooping();
     }
+    if (event.code === "Plus") {
+      event.preventDefault();
+      scale += + 0.1
+
+    }
+    if (event.code === "Minus") {
+      event.preventDefault();
+      scale -= + 0.1
+
+    }
+    
     if (
       (event.code === "KeyK" && event.ctrlKey === true) ||
       (event.code === "KeyK" && event.metaKey === true)
     ) {
-      paletteOpen = !paletteOpen;
       event.preventDefault();
     }
     log.debug(`Keypress: ${event.code}`);
   }
   function gotoStart() {
-    api!.stop();
-    api!.scrollToCursor();
+    api?.stop();
+    api?.scrollToCursor();
 
     if (isPlaying) {
       api!.play();
@@ -307,6 +290,7 @@
       const data = await readFile(file);
       let s: alpha.model.Score | undefined;
       s = alpha.importer.ScoreLoader.loadScoreFromBytes(new Uint8Array(data));
+
       api?.load(s);
       updateMetaData(s);
       log.info(`Loaded score: "${s.title}" by "${s.artist}"`);
@@ -331,13 +315,13 @@
         </Button>
       </section>
 
-      <div
-        class="col-start-2 col-span-2 flex justify-evenly px-2 rounded-[--radius] space-x-3 items-center"
-      >
+      <div class="col-start-2 col-span-2 join">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild let:builder>
-            <Button variant="default" class="outline" builders={[builder]}
-              >Settings</Button
+            <Button
+              variant="default"
+              class="join-item border-2 border-black"
+              builders={[builder]}>Settings</Button
             >
           </DropdownMenu.Trigger>
           <DropdownMenu.Content class="w-56">
@@ -400,20 +384,21 @@
             {/if}
           </DropdownMenu.Content>
         </DropdownMenu.Root>
+
         <Button
-          class="outline"
+          class="join-item border-2 border-black"
           onclick={() => {
             toggleSolo();
           }}
         >
-          <h1
+          <p
             class={`hover:scale-105 transition text-[24px] ${trackSolos[activeTrack] ? "text-[#bcff69]" : ""}`}
           >
             S
-          </h1>
+          </p>
         </Button>
 
-        <Button onclick={toggleMute} class="outline">
+        <Button onclick={toggleMute} class="join-item border-2 border-black">
           <Icon
             class="hover:scale-105 transition"
             icon={`${trackMutes[activeTrack] ? "tabler:volume-off" : "tabler:volume"}`}
@@ -423,12 +408,12 @@
           ></Icon>
         </Button>
 
-        <Button onclick={gotoStart} class="outline">
+        <Button onclick={gotoStart} class="join-item border-2 border-black">
           <Rewind width="24" height="24" class="hover:scale-105 transition"
           ></Rewind>
         </Button>
 
-        <Button onclick={playPause} class="outline">
+        <Button onclick={playPause} class="join-item border-2 border-black">
           {#if isPlaying}
             <Pause width={24} height={24} class="hover:scale-105 transition"
             ></Pause>
@@ -438,25 +423,29 @@
           {/if}
         </Button>
       </div>
-      <Card.Root
-        class="text-center outline bg-primary text-primary-foreground col-start-4 col-span-3 max-h-fit place-self-center mx-2 p-2 border-none max-w-fit"
-      >
-        <Card.Title class="line-clamp-1">{title}</Card.Title>
-        <Card.Description class="text-primary-foreground">
-          {artist ? artist : "None"} - {album ? album : "None"}
-        </Card.Description>
-      </Card.Root>
-
+      <div
+  class="col-start-4 border-2 rounded-sm border-black col-span-3 bg-primary max-h-[68px] place-self-center max-w-fit"
+>
+  <div class="card  p-2 content-center items-center text-center">
+    <h2 class="card-title">{score?.title ? score.title : "No Score"}</h2>
+    <p class="card-side">
+      {score?.artist ? score?.artist : "None"} - {score?.album
+        ? score?.album
+        : "None"}
+    </p>
+  </div>
+</div>
       <div class="col-start-8 items-center grid grid-flow-row">
-        <Zoom {scale} update={updateScale} />
-        <!-- <TrackControls bind:open={drawerOpen} bind:trackVolumes={trackVolumes} updateTrackVolume={setTrackVolume} active={activeTrack} selectTrack={(i:number) => { -->
-        <!-- 	activeTrack = i -->
-        <!-- 	api?.renderTracks([tracks[i]]) -->
-        <!-- 	log.info(`Changed track: ${tracks[i].name}`) -->
-        <!--   }} tracks={tracks}/> -->
+        <Drawer tempo={tempo} bind:speed={playBackSpeed} updateTrackVolume={setTrackVolume} tracks={tracks} trackVolumes={trackVolumes} bind:volume={masterVolume} active={activeTrack} selectTrack={(i:number) => {
+            activeTrack = i
+            api?.renderTracks([tracks[i]])
+            log.info(`Changed track: ${tracks[i].name}`)
+          }}></Drawer>
       </div>
-      <div class="col-start-9 justify-end space-x-1">
-        <ModeToggle />
+
+      <div class="col-start-9 items-center grid grid-flow-row">
+       <!-- TODO: Fix Zoom component.  -->
+        <Zoom {scale} update={updateScale} />
       </div>
     </div>
   </Header>
@@ -468,27 +457,12 @@
       No score loaded
 
       <p class="text-muted-foreground mt-[20%]">
-        Press <kbd
-          class="bg-secondary text-muted-foreground pointer-events-none inline-flex select-none items-center gap-1 rounded border px-1.5 font-mono text-[20px] font-medium opacity-100"
-        >
-          <span class="text-3xl">⌘K</span>
+        Press <kbd class="kbd text-2xl">
+          <span class="">⌘K</span>
         </kbd> to open Command Palette
       </p>
     </div>
   {/if}
-
-  <CommandPallete
-    bind:open={paletteOpen}
-    openFileHandler={openFile}
-    playPauseHandler={playPause}
-    soloHandler={toggleSolo}
-    muteHandler={toggleMute}
-    countInHandler={toggleCountIn}
-    metronomeHandler={toggleMetronome}
-    loopHandler={toggleLooping}
-    zoomInHandler={() => updateScale((scale += 0.1))}
-    zoomOutHandler={() => updateScale((scale -= 0.1))}
-  />
 
   <div id="alphaTab" class="w-screen h-screen"></div>
 </main>

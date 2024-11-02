@@ -9,12 +9,13 @@
     "beforeBuildCommand": "bun run build",
     "frontendDist": "../build"
   },
+
   "app": {
     "windows": [
       {
         "title": "opentab",
-        "width": 800,
-        "height": 600
+        "width": 1512,
+        "height": 982
       }
     ],
     "security": {
